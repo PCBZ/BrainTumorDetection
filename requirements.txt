@@ -1,13 +1,24 @@
-# Core dependencies for brain tumor detection project
+# Brain Tumor Detection Project Requirements
+
+# Core ML Libraries
 torch>=1.9.0
 torchvision>=0.10.0
 numpy>=1.21.0
-pandas>=1.3.0
-scikit-learn>=1.0.0
+scikit-learn>=1.0.2
+
+# Data handling
+kagglehub>=0.1.0
+Pillow>=8.3.0source brain_tumor_env/bin/activate
+
+# Visualization and analysis
 matplotlib>=3.4.0
 seaborn>=0.11.0
-Pillow>=8.3.0
 tqdm>=4.62.0
-opencv-python>=4.5.0
+
+# Optional but recommended
 jupyter>=1.0.0
-tensorboard>=2.7.0
+pandas>=1.3.0
+
+# For advanced features (optional)
+opencv-python>=4.5.0
+albumentations>=1.1.0
