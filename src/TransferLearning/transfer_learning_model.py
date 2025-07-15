@@ -62,7 +62,7 @@ class TransferLearningModel:
 
             num_features = model.classifier[-1].in_features
 
-            models.classifier[-1] = nn.Sequential(
+            model.classifier[-1] = nn.Sequential(
                 nn.Linear(num_features, 256),
                 nn.ReLU(),
                 nn.Dropout(0.4),
