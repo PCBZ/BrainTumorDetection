@@ -2,7 +2,7 @@ import copy
 import time
 from tqdm import tqdm
 import numpy as np
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, roc_auc_score, recall_score, f1_score
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, roc_auc_score
 import torch
 import torch.nn as nn
 
@@ -102,26 +102,20 @@ def evaluate_model(model, dataloader, device='cuda'):
     cm = confusion_matrix(all_labels, all_preds)
     print(cm)
 
-    accuracy_score = accuracy_score(all_labels, all_preds)
-    precision_score = precision_score(all_labels, all_preds, zero_division=0)
-    recall_score = recall_score(all_labels, all_preds, zero_division=0)
-    f1_score = f1_score(all_labels, all_preds, zero_division=0)
+    accuracy = accuracy_score(all_labels, all_preds)
+    precision = precision_score(all_labels, all_preds, zero_division=0)
 
-    auc_score = roc_auc_score(all_labels, all_probs[:, 1])
+    auc = roc_auc_score(all_labels, all_probs[:, 1])
 
     print("\nEvaluation metrics:")
-    print(f"\nAccuracy: {accuracy_score :.2%}")
-    print(f"Precision: {precision_score: .2%}")
-    print(f"Recall: {recall_score: .4f}")
-    print(f"F1 Score: {f1_score: .4f}")
-    print(f"AUC Score: {auc_score: .4f}")
+    print(f"\nAccuracy: {accuracy :.2%}")
+    print(f"Precision: {precision: .2%}")
+    print(f"AUC Score: {auc: .4f}")
 
     return {
-        'accuracy': accuracy_score,
-        'precision': precision_score,
-        'recall': recall_score,
-        'f1_score': f1_score,
-        'auc_score': auc_score,
+        'accuracy': accuracy,
+        'precision': precision,
+        'auc_score': auc,
         'confusion_matrix': cm,
         'predictions': all_preds,
         'labels': all_labels,
