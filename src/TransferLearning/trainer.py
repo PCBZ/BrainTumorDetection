@@ -17,7 +17,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
         model: The trained model
         history: Dictionary containing training loss and accuracy history
     """
-    beset_model_wts = copy.deepcopy(model.state_dict())
+    best_model_wts = copy.deepcopy(model.state_dict())
     best_train_acc = 0.0
 
     history = {
@@ -39,7 +39,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
 
             optimizer.zero_grad()
 
-            # Forward pass: compute model ouput
+            # Forward pass: compute model output
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
             loss = criterion(outputs, labels)
@@ -63,7 +63,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
 
         if epoch_acc > best_train_acc:
             best_train_acc = epoch_acc
-            beset_model_wts = copy.deepcopy(model.state_dict())
+            best_model_wts = copy.deepcopy(model.state_dict())
 
-    model.load_state_dict(beset_model_wts)
+    model.load_state_dict(best_model_wts)
     return model, history
