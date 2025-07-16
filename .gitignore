@@ -210,3 +210,6 @@ __marimo__/
 .data/
 data/
 *.data
+
+# Neural network models and weights
+*.pth
