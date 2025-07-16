@@ -9,7 +9,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
     """
     Train model.
     """
-    beset_model_wts = copy.deepcopy(model.state_dict())
+    best_model_wts = copy.deepcopy(model.state_dict())
     best_train_acc = 0.0
 
     history = {
