@@ -9,6 +9,9 @@ jobs:
       matrix:
         python-version: [">=3.8"]
     steps:
+    - name: Install dependencies
+      run: |
+        pip install scikit-learn torch torchvision kagglehub numpy matplotlib seaborn
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
