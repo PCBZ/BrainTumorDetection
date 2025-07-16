@@ -1,5 +1,4 @@
 import copy
-import time
 from tqdm import tqdm
 import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, roc_auc_score
@@ -10,8 +9,6 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
     """
     Train model.
     """
-    since = time.time()
-
     beset_model_wts = copy.deepcopy(model.state_dict())
     best_train_acc = 0.0
 
@@ -60,64 +57,5 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
             best_train_acc = epoch_acc
             beset_model_wts = copy.deepcopy(model.state_dict())
 
-    time_elapsed = time.time() - since
-    print(f'Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
-
     model.load_state_dict(beset_model_wts)
     return model, history
-
-def evaluate_model(model, dataloader, device='cuda'):
-    """
-    Evaluate model.
-    """
-    model.eval()
-    all_preds = []
-    all_labels = []
-    all_probs = []
-
-    with torch.no_grad():
-        for inputs, labels in tqdm(dataloader, desc='evaluating'):
-            inputs = inputs.to(device)
-            labels = labels.to(device)
-
-            # Forward pass: get model predictions
-            outputs = model(inputs)
-
-            probs = nn.functional.softmax(outputs, dim=1)
-            _, preds = torch.max(outputs, 1)
-
-            all_preds.extend(preds.cpu().numpy())
-            all_labels.extend(labels.cpu().numpy())
-            all_probs.extend(probs.cpu().numpy())
-
-
-    all_preds = np.array(all_preds)
-    all_labels = np.array(all_labels)
-    all_probs = np.array(all_probs)
-
-    print("\nClassification Report:")
-    print(classification_report(all_labels, all_preds, target_names=['No Tumor', 'Tumor']))
-
-    print("\nConfusion Matrix:")
-    cm = confusion_matrix(all_labels, all_preds)
-    print(cm)
-
-    accuracy = accuracy_score(all_labels, all_preds)
-    precision = precision_score(all_labels, all_preds, zero_division=0)
-
-    auc = roc_auc_score(all_labels, all_probs[:, 1])
-
-    print("\nEvaluation metrics:")
-    print(f"\nAccuracy: {accuracy :.2%}")
-    print(f"Precision: {precision: .2%}")
-    print(f"AUC Score: {auc: .4f}")
-
-    return {
-        'accuracy': accuracy,
-        'precision': precision,
-        'auc_score': auc,
-        'confusion_matrix': cm,
-        'predictions': all_preds,
-        'labels': all_labels,
-        'probabilities': all_probs
-    }
