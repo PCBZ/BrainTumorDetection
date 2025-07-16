@@ -9,7 +9,6 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import torch
 import kagglehub
-import numpy as np
 
 class DataPreprocessor:
     @staticmethod
@@ -77,14 +76,13 @@ class DataLoaderHelper:
             for x in ['train', 'test']
         }
 
-
         train_labels = [label for _, label in image_datasets['train']]
         class_counts = torch.bincount(torch.tensor(train_labels))
         class_weights = 1.0 / class_counts.float()
         class_weights = class_weights / class_weights.sum() * 2  # Normalize
 
-        return dataloaders, class_weights
-    
+        return dataloaders, class_weights, image_datasets
+
 class DataUtils:
     @staticmethod
     def load_brain_tumor_data_pipeline(dataset_url='navoneel/brain-mri-images-for-brain-tumor-detection',
@@ -99,10 +97,10 @@ class DataUtils:
         target_path = DataPreprocessor.organize_data(path, target_path)
 
         # Load data using DataLoader
-        dataloaders, class_weights = DataLoaderHelper.load_data(target_path)
+        dataloaders, class_weights, image_datasets = DataLoaderHelper.load_data(target_path)
 
-        return dataloaders, class_weights
+        return dataloaders, class_weights, image_datasets
 
 if __name__ == "__main__":
     # Example usage
-    dataloaders, class_weights = DataUtils.load_brain_tumor_data_pipeline(target_path='.data/brain_tumor_split')
+    dataloaders, class_weights, image_datasets = DataUtils.load_brain_tumor_data_pipeline(target_path='.data/brain_tumor_split')
