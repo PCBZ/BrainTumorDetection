@@ -1,13 +1,21 @@
 import copy
 from tqdm import tqdm
-import numpy as np
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, roc_auc_score
 import torch
-import torch.nn as nn
 
 def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=25, device='cuda'):
     """
-    Train model.
+    Train the model for a specified number of epochs.
+    Args:
+        model: The neural network model to train
+        dataloaders: Dictionary containing 'train' and 'test' DataLoader objects
+        criterion: Loss function
+        optimizer: Optimizer for training
+        scheduler: Learning rate scheduler
+        num_epochs: Number of epochs to train the model
+        device: Device to run the training on ('cuda' or 'cpu')
+    Returns:
+        model: The trained model
+        history: Dictionary containing training loss and accuracy history
     """
     beset_model_wts = copy.deepcopy(model.state_dict())
     best_train_acc = 0.0
