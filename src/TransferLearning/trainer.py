@@ -31,7 +31,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
 
             optimizer.zero_grad()
 
-            # Forward pass: compute model ouput
+            # Forward pass: compute model output
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
             loss = criterion(outputs, labels)
