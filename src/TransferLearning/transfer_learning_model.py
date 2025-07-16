@@ -68,5 +68,7 @@ class TransferLearningModel:
                 nn.Dropout(0.4),
                 nn.Linear(256, 2),
             )
+        else:
+            raise ValueError(f"Unsupported ModelType: {self.model_type}")
 
         return model

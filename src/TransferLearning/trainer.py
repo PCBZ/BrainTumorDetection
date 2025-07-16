@@ -61,8 +61,8 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, num_epochs=
 
         print(f'Train Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}')
 
-        if epoch_acc > best_train_acc:
-            best_train_acc = epoch_acc
+        if epoch_acc.item() > best_train_acc:
+            best_train_acc = epoch_acc.item()
             best_model_wts = copy.deepcopy(model.state_dict())
 
     model.load_state_dict(best_model_wts)
