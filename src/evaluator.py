@@ -1,14 +1,16 @@
 import os
-import json
 import numpy as np
+import json
+import matplotlib.pyplot as plt
+import seaborn as sns
 from datetime import datetime
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
+
 
 def evaluate_model(y_true, y_pred, y_probs, model_name):
     """
     Evaluate the model performance using various metrics.
     """
-
     all_labels = y_true
     all_preds = y_pred
     all_probs = y_probs
@@ -33,6 +35,47 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
     print(f"F1 Score: {f1: .2%}")
     print(f"AUC Score: {auc: .4f}")
 
+    # Create visualizations
+    figures_dir = os.path.join("results", "figures")
+    os.makedirs(figures_dir, exist_ok=True)
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Draw confusion matrix heatmap
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['No Tumor', 'Tumor'], 
+                yticklabels=['No Tumor', 'Tumor'])
+    plt.title(f'Confusion Matrix - {model_name}')
+    plt.ylabel('True Label')
+    plt.xlabel('Predicted Label')
+    
+    cm_filename = f"{model_name}_confusion_matrix_{timestamp}.png"
+    cm_filepath = os.path.join(figures_dir, cm_filename)
+    plt.savefig(cm_filepath, dpi=300, bbox_inches='tight')
+    plt.show()
+    print(f"Confusion matrix saved to: {cm_filepath}")
+    
+    # Draw ROC curve
+    fpr, tpr, _ = roc_curve(all_labels, all_probs[:, 1])
+    
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {auc:.4f})')
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', label='Random')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(f'ROC Curve - {model_name}')
+    plt.legend(loc="lower right")
+    plt.grid(True, alpha=0.3)
+    
+    roc_filename = f"{model_name}_roc_curve_{timestamp}.png"
+    roc_filepath = os.path.join(figures_dir, roc_filename)
+    plt.savefig(roc_filepath, dpi=300, bbox_inches='tight')
+    plt.show()
+    print(f"ROC curve saved to: {roc_filepath}")
+
     # Save input data to file
     reports_dir = os.path.join("results", "reports")
     os.makedirs(reports_dir, exist_ok=True)
@@ -43,7 +86,6 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
         "y_probs": np.array(y_probs).tolist()
     }
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{model_name}_input_data_{timestamp}.json"
     filepath = os.path.join(reports_dir, filename)
     
