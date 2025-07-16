@@ -7,9 +7,16 @@ from datetime import datetime
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve
 
 
-def evaluate_model(y_true, y_pred, y_probs, model_name):
+def evaluate_model(y_true, y_pred, y_probs, model_name, dir=None):
     """
     Evaluate the model performance using various metrics.
+    
+    Args:
+        y_true: True labels
+        y_pred: Predicted labels
+        y_probs: Prediction probabilities
+        model_name: Name of the model
+        dir: Directory to save results (optional, defaults to timestamped folder)
     """
     all_labels = y_true
     all_preds = y_pred
@@ -36,8 +43,12 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
     print(f"AUC Score: {auc: .4f}")
 
     # Create visualizations
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    evaluation_dir = os.path.join("results", "figures", f"{model_name}_{timestamp}")
+    if dir is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        evaluation_dir = os.path.join("results", "figures", f"{model_name}_{timestamp}")
+    else:
+        evaluation_dir = os.path.join(dir, model_name)
+    
     os.makedirs(evaluation_dir, exist_ok=True)
     
     # Draw confusion matrix heatmap
