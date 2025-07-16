@@ -36,10 +36,9 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
     print(f"AUC Score: {auc: .4f}")
 
     # Create visualizations
-    figures_dir = os.path.join("results", "figures")
-    os.makedirs(figures_dir, exist_ok=True)
-    
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    evaluation_dir = os.path.join("results", "figures", f"{model_name}_{timestamp}")
+    os.makedirs(evaluation_dir, exist_ok=True)
     
     # Draw confusion matrix heatmap
     plt.figure(figsize=(8, 6))
@@ -50,8 +49,8 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
     plt.ylabel('True Label')
     plt.xlabel('Predicted Label')
     
-    cm_filename = f"{model_name}_confusion_matrix_{timestamp}.png"
-    cm_filepath = os.path.join(figures_dir, cm_filename)
+    cm_filename = f"confusion_matrix.png"
+    cm_filepath = os.path.join(evaluation_dir, cm_filename)
     plt.savefig(cm_filepath, dpi=300, bbox_inches='tight')
     plt.show()
     print(f"Confusion matrix saved to: {cm_filepath}")
@@ -70,24 +69,21 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
     plt.legend(loc="lower right")
     plt.grid(True, alpha=0.3)
     
-    roc_filename = f"{model_name}_roc_curve_{timestamp}.png"
-    roc_filepath = os.path.join(figures_dir, roc_filename)
+    roc_filename = f"roc_curve.png"
+    roc_filepath = os.path.join(evaluation_dir, roc_filename)
     plt.savefig(roc_filepath, dpi=300, bbox_inches='tight')
     plt.show()
     print(f"ROC curve saved to: {roc_filepath}")
 
-    # Save input data to file
-    reports_dir = os.path.join("results", "reports")
-    os.makedirs(reports_dir, exist_ok=True)
-    
+    # Save input data to file in the same evaluation directory
     input_data = {
         "y_true": np.array(y_true).tolist(),
         "y_pred": np.array(y_pred).tolist(), 
         "y_probs": np.array(y_probs).tolist()
     }
     
-    filename = f"{model_name}_input_data_{timestamp}.json"
-    filepath = os.path.join(reports_dir, filename)
+    filename = f"input_data.json"
+    filepath = os.path.join(evaluation_dir, filename)
     
     with open(filepath, 'w') as f:
         json.dump(input_data, f, indent=2)
