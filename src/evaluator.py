@@ -90,3 +90,11 @@ def evaluate_model(y_true, y_pred, y_probs, model_name):
     
     print(f"\nInput data saved to: {filepath}")
 
+    return {
+        "accuracy": accuracy,
+        "precision": precision,
+        "recall": recall,
+        "f1_score": f1,
+        "auc": auc
+    }
+
