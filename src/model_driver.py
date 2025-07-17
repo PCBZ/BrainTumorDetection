@@ -79,6 +79,7 @@ class ModelDriveManager:
         model_path = os.path.join(approach2_path, f"{model_type.value}-{strategy.value}.pth")
         try:
             torch.save(model.state_dict(), model_path)
+            print(f"Model saved to: {model_path}")
         except Exception as e:
             print(f"Error saving model: {e}")
             return ""
