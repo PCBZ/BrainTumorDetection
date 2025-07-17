@@ -22,7 +22,7 @@ class ModelDriveManager:
     """
     Class to manage model training and evaluation.
     """
-    def __init__(self, base_drive_path: str = '/content/drive/MyDrive/BrainTumorDetection'):
+    def __init__(self, base_drive_path: str = '/content/drive/MyDrive/BrainTumorDetection_TeamShared'):
         """
         Initialize the ModelDriveManager with the base path for Google Drive.
         args:
