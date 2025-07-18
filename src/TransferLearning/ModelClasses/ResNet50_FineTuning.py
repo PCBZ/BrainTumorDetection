@@ -2,16 +2,15 @@ import torch.nn as nn
 from torchvision import models
 
 class ResNet50_FineTuning(nn.Module):
-    def __init__(self, num_classes=2, dropout_rate=0.4, pretrained=True):
+    def __init__(self, dropout_rate=0.4):
         super().__init__()
-        model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2 if pretrained else None)
-        # 不冻结参数
+        model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
         num_features = model.fc.in_features
         model.fc = nn.Sequential(
             nn.Linear(num_features, 256),
             nn.ReLU(),
             nn.Dropout(dropout_rate),
-            nn.Linear(256, num_classes),
+            nn.Linear(256, 2),
         )
         self.model = model
 
