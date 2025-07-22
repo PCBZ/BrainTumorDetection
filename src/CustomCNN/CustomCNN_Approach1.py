@@ -31,7 +31,7 @@ class CustomCNN_Approach1(nn.Module):
         self.classifier = nn.Sequential(
             nn.Linear(256, 512), nn.BatchNorm1d(512), nn.ReLU(), nn.Dropout(dropout_rate),
             nn.Linear(512, 256), nn.BatchNorm1d(256), nn.ReLU(), nn.Dropout(dropout_rate * 0.5),
-            nn.Linear(256, 1)
+            nn.Linear(256, 2)
         )
 
     def forward(self, x):
