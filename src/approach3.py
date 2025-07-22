@@ -274,7 +274,7 @@ class ClassBalancedLoss(nn.Module):
 
 class SimpleCNN(nn.Module):
     """Simple baseline CNN for Approach 3"""
-    def __init__(self, num_classes=2, dropout_rate=0.3):
+    def __init__(self, dropout_rate=0.3):
         super(SimpleCNN, self).__init__()
         
         # Simple feature extraction
@@ -309,7 +309,7 @@ class SimpleCNN(nn.Module):
             nn.Linear(256, 128),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout_rate),
-            nn.Linear(128, num_classes)
+            nn.Linear(128, 2)
         )
         
     def forward(self, x):
@@ -704,7 +704,6 @@ def create_approach3_config():
     """Create default configuration for Approach 3"""
     return {
         'model_params': {
-            'num_classes': 2,
             'dropout_rate': 0.3
         },
         'loss_type': 'focal',  # 'focal', 'class_balanced'
