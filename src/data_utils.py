@@ -72,8 +72,10 @@ class DataLoaderHelper:
         }
 
         dataloaders = {
-            x: DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=num_workers)
-            for x in ['train', 'test']
+            'train': DataLoader(image_datasets['train'], batch_size=batch_size, 
+                            shuffle=True, num_workers=num_workers),
+            'test': DataLoader(image_datasets['test'], batch_size=batch_size, 
+                            shuffle=False, num_workers=num_workers) 
         }
 
         train_labels = [label for _, label in image_datasets['train']]
