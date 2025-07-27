@@ -20,7 +20,7 @@ class DataPreprocessor:
 
         for class_name in ['yes', 'no']:
             class_path = os.path.join(source_path, class_name)
-            images = os.listdir(class_path)
+            images = sorted(os.listdir(class_path))
             for image in images:
                 all_images.append(os.path.join(class_path, image))
                 all_labels.append(class_name)
